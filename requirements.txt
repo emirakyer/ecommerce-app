@@ -6,3 +6,6 @@ django-ckeditor==6.6.1
 djangorestframework
 drf_spectacular
 drf_spectacular_sidecar
+dj-database-url
+python-decouple
+psycopg
