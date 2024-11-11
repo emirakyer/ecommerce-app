@@ -1,0 +1,8 @@
+requests
+python-dotenv
+psycopg2
+Django==5.0.0
+django-ckeditor==6.6.1
+djangorestframework
+drf_spectacular
+drf_spectacular_sidecar

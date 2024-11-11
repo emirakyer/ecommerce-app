@@ -1,0 +1,7 @@
+# Sanal ortam klasörünü görmezden gel
+.venv/
+
+# Not dosyasını görmezden gel
+notes.md
+
+.env
