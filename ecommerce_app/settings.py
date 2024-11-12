@@ -139,6 +139,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / "local-cdn" / "static"
+MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "local-cdn" / "media" 
 
 # Default primary key field type
