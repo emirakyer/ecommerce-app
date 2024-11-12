@@ -61,7 +61,7 @@ ROOT_URLCONF = "ecommerce_app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / 'ecommerce_app/templates'],
+        "DIRS": [BASE_DIR / 'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -133,6 +133,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Bu yol, static klasörünü ana dizine taşımanıza uygun olacaktır.
+]
+
+STATIC_ROOT = BASE_DIR / "local-cdn" / "static"
+MEDIA_ROOT = BASE_DIR / "local-cdn" / "media" 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

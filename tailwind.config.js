@@ -1,13 +1,15 @@
-/** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
   content: [
-    "./ecommerce_app/templates/**/*.{html,js}", // HTML veya JavaScript dosyalarını izler
-    "./ecommerce_app/static/**/*.css", // ecommerce_app içindeki tüm statik CSS dosyalarını izler
-    "./node_modules/flowbite/**/*.js", // Flowbite modülünü izler
-    "./ecommerce_app/products/forms.py", // Django form dosyasını izler
+    "./templates/**/*.{html,js}", // Tüm HTML ve JavaScript dosyalarını izle
+    "./static/**/*.css", // Tüm CSS dosyalarını izle
+    "./node_modules/flowbite/**/*.js", // Flowbite modülünü izle
+    "./**/*.py", // Proje genelindeki Python dosyalarını izle
   ],
   theme: {
     extend: {},
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [
+    require("flowbite/plugin"), // Flowbite plugin'i ekle
+  ],
 };

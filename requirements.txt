@@ -9,3 +9,4 @@ drf_spectacular_sidecar
 dj-database-url
 python-decouple
 psycopg
+Pillow
