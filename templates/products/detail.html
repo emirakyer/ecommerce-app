@@ -17,6 +17,7 @@
 
         {% include 'products/attachments-table.html' with attachments=attachments is_owner=is_owner %}
 
+
     </div>
 
 
@@ -27,9 +28,13 @@
         {% if is_owner %}
         <p>You own this product.</p>
         {% else %}
-        <div>
+            <div>
+            <p class="text-lg font-semibold">Price: ${{ object.price }}</p>
+            </div>
 
-        </div>
+            <div>
+                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Buy Now</button>
+            </div>
         {% endif %}
         {% if object.image %}
             <div class="grid gap-4 ">

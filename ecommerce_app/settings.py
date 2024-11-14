@@ -141,6 +141,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / "local-cdn" / "static"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "local-cdn" / "media" 
+PROTECTED_MEDIA_ROOT = BASE_DIR / "local-cdn" / "protected" 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
