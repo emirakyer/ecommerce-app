@@ -44,10 +44,19 @@ def product_manage_detail_view(request, handle=None):
         instance.save()
         formset.save(commit=False)
         for _form in formset:
-            attachment_obj = _form.save(commit=False)
-            attachment_obj.product = instance
-            attachment_obj.save()
-
+            is_delete = _form.cleaned_data.get("DELETE")
+            try:
+                attachment_obj = _form.save(commit=False)
+            except:
+                attachment_obj = None
+            if is_delete:
+                if attachment_obj is not None:
+                    if attachment_obj.pk:
+                        attachment_obj.delete()
+            else:
+                if attachment_obj is not None:
+                    attachment_obj.product = instance
+                    attachment_obj.save()
         return redirect (obj.get_manage_url())
     context['form'] = form
     context['formset'] = formset
@@ -61,7 +70,7 @@ def product_detail_view(request, handle=None):
     # attachments = obj.productattachment_set.all()
     is_owner=False
     if request.user.is_authenticated:
-        is_owner = True
+        is_owner = request.user.purchase_set.all().filter(product=obj, completed=True).exists()
     context = {"object": obj, "is_owner": is_owner,"attachments":attachments}
     return render(request,'products/detail.html', context)
 

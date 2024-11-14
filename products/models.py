@@ -35,6 +35,13 @@ class Product(models.Model):
             self.price_changed_timestamp = timezone.now()
         super().save(*args, **kwargs)
 
+    @property
+    def display_name(self):
+        return self.name
+
+    def __str__(self):
+        return self.display_name
+        
     def get_absolute_url(self):
         return reverse("products:detail", kwargs={"handle": self.handle})
     
