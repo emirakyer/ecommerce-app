@@ -6,6 +6,8 @@ from .models import Product, ProductAttachment
 
 import mimetypes
 from django.http import FileResponse, HttpResponseBadRequest
+from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import login_required
 
 def product_create_view(request):
     context ={}
@@ -28,17 +30,25 @@ def product_list_view(request):
     return render(request, 'products/list.html', {"object_list":object_list})
 
 
+from django.shortcuts import get_object_or_404, render, redirect
+
 def product_manage_detail_view(request, handle=None):
     obj = get_object_or_404(Product, handle=handle)
+    print("Handle:", handle)
+
     attachments = ProductAttachment.objects.filter(product=obj)
-    is_manager=False
-    if request.user.is_authenticated:
-        is_manager = obj.user == request.user # verify ownership
-    context ={"object": obj}
-    if not is_manager:
-        return HttpResponseBadRequest()
     form = ProductUpdateForm(request.POST or None, request.FILES or None, instance=obj)
-    formset = ProductAttachmentInlineFormSet(request.POST or None,request.FILES or None, queryset=attachments)
+    formset = ProductAttachmentInlineFormSet(
+        request.POST or None, 
+        request.FILES or None,
+        queryset=attachments
+    )
+    
+    if not form.is_valid():
+        print("Form Errors:", form.errors)
+    if not formset.is_valid():
+        print("Formset Errors:", formset.errors)
+    
     if form.is_valid() and formset.is_valid():
         instance = form.save(commit=False)
         instance.save()
@@ -57,12 +67,60 @@ def product_manage_detail_view(request, handle=None):
                 if attachment_obj is not None:
                     attachment_obj.product = instance
                     attachment_obj.save()
-        return redirect (obj.get_manage_url())
+        return redirect(obj.get_manage_url())
+
+    context = {"object": obj, "form": form, "formset": formset}
+    return render(request, 'products/manager.html', context)
+
+
+'''
+def product_manage_detail_view(request, handle=None):
+    obj = get_object_or_404(Product, handle=handle)
+    print("Handle:", handle)
+
+
+    attachments = ProductAttachment.objects.filter(product=obj)
+    is_manager = False
+    if request.user.is_authenticated:
+        is_manager = obj.user == request.user
+    context = {"object": obj}
+    if not is_manager:
+        return HttpResponseForbidden("You are not authorized to manage this product.")
+    form = ProductUpdateForm(request.POST or None, request.FILES or None, instance=obj)
+    formset = ProductAttachmentInlineFormSet(request.POST or None, 
+                                             request.FILES or None,queryset=attachments)
+    
+    print("Current User:", request.user)
+    print("Object Owner:", obj.user)
+    print("Is Manager:", obj.user == request.user)
+    if not form.is_valid():
+        print("Form Errors:", form.errors)
+    if not formset.is_valid():
+        print("Formset Errors:", formset.errors)
+    if form.is_valid() and formset.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        formset.save(commit=False)
+        for _form in formset:
+            is_delete = _form.cleaned_data.get("DELETE")
+            try:
+                attachment_obj = _form.save(commit=False)
+            except:
+                attachment_obj = None
+            if is_delete:
+                if attachment_obj is not None:
+                    if attachment_obj.pk:
+                        attachment_obj.delete()
+            else:
+                if attachment_obj is not None:
+                    attachment_obj.product  = instance
+                    attachment_obj.save()
+        return redirect(obj.get_manage_url())
     context['form'] = form
     context['formset'] = formset
-    return render(request,'products/manager.html', context)
+    return render(request, 'products/manager.html', context)
 
-
+'''
 
 def product_detail_view(request, handle=None):
     obj = get_object_or_404(Product, handle=handle)
